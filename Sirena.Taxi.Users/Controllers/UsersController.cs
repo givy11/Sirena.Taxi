@@ -17,9 +17,10 @@ namespace Sirena.Taxi.Users.Controllers
 
         [HttpGet]
         [Route("List")]
-        public IEnumerable<string> GetList()
+        public async Task<IEnumerable<User>> GetList()
         {
-            return new string[] { "value1", "value2" };
+            var users = await _userRepository.GetAllAsync();
+            return users;
         }
 
         [HttpGet]
@@ -29,8 +30,11 @@ namespace Sirena.Taxi.Users.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<User> Post(User entity)
         {
+            entity.Id = Guid.NewGuid();
+            await _userRepository.AddAsync(entity);
+            return entity;
         }
 
         [HttpPut("{id}")]

@@ -8,14 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddDbContext<DataContext>(x =>
 {
-    //x.UseSqlite("Filename=PromoCodeFactoryDb.sqlite");
     x.UseNpgsql(builder.Configuration.GetConnectionString("SirenaDb"));
     x.UseSnakeCaseNamingConvention();
     x.UseLazyLoadingProxies();
 });
+builder.Services.AddScoped(typeof(DbContext), typeof(DataContext));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
