@@ -10,7 +10,7 @@ namespace Sirena.Taxi.Prices.Domain.Entities
         public string DestinationAddress { get; set; }
         public double DestinationLongitude { get; set; }
         public double DestinationLatitude { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
         public bool ResponseReceived { get; set; }
         public DateTime CreatedOn { get; set; }
     }
