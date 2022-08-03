@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Sirena.Taxi.Core.Abstractions.Repositories;
-using Sirena.Taxi.Users.Domain;
+using Sirena.Taxi.Prices.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 

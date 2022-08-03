@@ -24,9 +24,10 @@ namespace Sirena.Taxi.Users.Controllers
         }
 
         [HttpGet]
-        public string Get(int id)
+        public async Task<User?> Get(Guid id)
         {
-            return "value";
+            var user = await _userRepository.GetByIdAsync(id);
+            return user;
         }
 
         [HttpPost]
@@ -38,13 +39,30 @@ namespace Sirena.Taxi.Users.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(Guid id, [FromBody] User entity)
         {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest("Пользователь с указанным Id не существует");
+            }
+
+            await _userRepository.UpdateAsync(entity);
+            return Ok();
+
         }
 
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest("Пользователь с указанным Id не существует");
+            }
+
+            await _userRepository.DeleteAsync(id);
+            return Ok();
         }
     }
 }
