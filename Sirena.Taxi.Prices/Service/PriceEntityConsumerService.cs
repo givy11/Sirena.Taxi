@@ -14,8 +14,12 @@ namespace Sirena.Taxi.Prices.Service
             _priceRepository = priceRepository;
         }
 
-
-        public async Task UpdatePriceRequestAsync(PriceRequest? pr)
+        /// <summary>
+        /// Обновляет запрос цены полученными данными
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        private async Task UpdatePriceRequestAsync(PriceRequest? pr)
         {
             if (pr == null) return;
             var priceRequest = await _priceRepository.GetByIdAsync(pr.Id);
@@ -29,6 +33,7 @@ namespace Sirena.Taxi.Prices.Service
             await _priceRepository.UpdateAsync(priceRequest);
         }
 
+        /// <inheritdoc />
         public async Task Execute(string topic, string message)
         {
             var entity = JsonConvert.DeserializeObject<PriceRequest>(message);

@@ -14,7 +14,12 @@ namespace Sirena.Taxi.Orders.Service
             _orderRepository = orderRepository;
         }
 
-        public async Task UpdateOrderAsync(Order? order)
+        /// <summary>
+        /// Обновляет заказ данными из сервиса оформления
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        private async Task UpdateOrderAsync(Order? order)
         {
             if (order == null) return;
             var entity = await _orderRepository.GetByIdAsync(order.Id);
@@ -28,6 +33,8 @@ namespace Sirena.Taxi.Orders.Service
 
             await _orderRepository.UpdateAsync(entity);
         }
+
+        /// <inheritdoc />
         public async Task Execute(string topic, string message)
         {
             var entity = JsonConvert.DeserializeObject<Order>(message);

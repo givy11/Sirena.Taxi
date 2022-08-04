@@ -5,6 +5,9 @@ using Sirena.Taxi.Core.Domain;
 
 namespace Sirena.Taxi.Core.Kafka
 {
+    /// <summary>
+    /// Продюсер сообщений в Кафка.
+    /// </summary>
     public class MessageProducer
     {
         private readonly IConfiguration _options;
@@ -14,6 +17,11 @@ namespace Sirena.Taxi.Core.Kafka
             _options = options;
         }
 
+        /// <summary>
+        /// Отправить сообщение в топик.
+        /// </summary>
+        /// <param name="entity">Сообщение для топика.</param>
+        /// <exception cref="Exception">Ошибка доставки.</exception>
         public void Produce(BaseEntity entity)
         {
             var connection = _options.GetSection("Kafka");

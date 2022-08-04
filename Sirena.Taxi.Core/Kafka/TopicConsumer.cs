@@ -6,6 +6,9 @@ using Sirena.Taxi.Core.Abstractions;
 
 namespace Sirena.Taxi.Core.Kafka
 {
+    /// <summary>
+    /// Слушатель для Кафка
+    /// </summary>
     public class TopicConsumer : BackgroundService
     {
         private readonly IConfiguration _options;
@@ -45,7 +48,7 @@ namespace Sirena.Taxi.Core.Kafka
                         var cr = consumer.Consume(100);
                         if (cr != null)
                         {
-                            _entityConsumerService.Execute(connection["ConsumerTopic"], cr.Message.Value);
+                            await _entityConsumerService.Execute(connection["ConsumerTopic"], cr.Message.Value);
                         }
                     }
                 }
