@@ -21,8 +21,8 @@ namespace Sirena.Taxi.Prices.Controllers
         [HttpGet]
         public async Task<PriceRequest?> Get(Guid id)
         {
-            var user = await _priceRepository.GetByIdAsync(id);
-            return user;
+            var entity = await _priceRepository.GetByIdAsync(id);
+            return entity;
         }
 
         [HttpPost]
