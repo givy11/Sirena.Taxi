@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Sirena.Taxi.Core.Abstractions.Repositories;
 using Sirena.Taxi.Prices.Domain;
 using Sirena.Taxi.Prices.Kafka;
+using Sirena.Taxi.Prices.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<DataContext>(x =>
 builder.Services.AddScoped(typeof(DbContext), typeof(DataContext));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddSingleton(typeof(MessageProducer));
+builder.Services.AddScoped(typeof(PriceService));
+builder.Services.AddHostedService<TopicConsumer>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

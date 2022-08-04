@@ -13,7 +13,7 @@ namespace Sirena.Taxi.Prices.Kafka
             _options = options;
         }
 
-        public void Produce(string topicBlock, BaseEntity entity)
+        public void Produce(BaseEntity entity)
         {
             var connection = _options.GetSection("Kafka");
             var producerConfig = new ProducerConfig(
@@ -29,14 +29,14 @@ namespace Sirena.Taxi.Prices.Kafka
 
             var producer = new ProducerBuilder<string, string>(producerConfig).Build();
 
-            foreach (var topic in connection.GetSection(topicBlock).Get<List<string>>())
+            foreach (var topic in connection.GetSection("ProducerTopics").Get<List<string>>())
             {
                 producer.Produce(topic, new Message<string, string> { Key = entity.Id.ToString(), Value = JsonConvert.SerializeObject(entity) },
                     (deliveryReport) =>
                     {
                         if (deliveryReport.Error.Code != ErrorCode.NoError)
                         {
-                            throw new Exception($"Failed to deliver message: {deliveryReport.Error.Reason}");
+                            throw new Exception($"Ошибка доставки сообщения: {deliveryReport.Error.Reason}");
                         }
                     });
             }
