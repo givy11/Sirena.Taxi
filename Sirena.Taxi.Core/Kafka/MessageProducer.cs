@@ -1,8 +1,9 @@
 ﻿using Confluent.Kafka;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Sirena.Taxi.Core.Domain;
 
-namespace Sirena.Taxi.Prices.Kafka
+namespace Sirena.Taxi.Core.Kafka
 {
     public class MessageProducer
     {

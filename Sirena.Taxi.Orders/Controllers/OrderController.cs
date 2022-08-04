@@ -1,32 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sirena.Taxi.Core.Abstractions.Repositories;
 using Sirena.Taxi.Core.Kafka;
-using Sirena.Taxi.Prices.Domain.Entities;
+using Sirena.Taxi.Orders.Domain.Entities;
 
-namespace Sirena.Taxi.Prices.Controllers
+namespace Sirena.Taxi.Orders.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PriceController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly IRepository<PriceRequest> _priceRepository;
+        private readonly IRepository<Order> _priceRepository;
         private readonly MessageProducer _messageProducer;
 
-        public PriceController(IRepository<PriceRequest> priceRepository, MessageProducer messageProducer)
+        public OrderController(IRepository<Order> priceRepository, MessageProducer messageProducer)
         {
             _priceRepository = priceRepository;
             _messageProducer = messageProducer;
         }
 
         [HttpGet]
-        public async Task<PriceRequest?> Get(Guid id)
+        public async Task<Order?> Get(Guid id)
         {
             var user = await _priceRepository.GetByIdAsync(id);
             return user;
         }
 
         [HttpPost]
-        public async Task<Guid> Post(PriceRequest entity)
+        public async Task<Guid> Post(Order entity)
         {
             entity.Id = Guid.NewGuid();
             entity.Price = null;

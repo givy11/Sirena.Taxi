@@ -1,13 +1,15 @@
-﻿using Sirena.Taxi.Core.Abstractions.Repositories;
+﻿using Newtonsoft.Json;
+using Sirena.Taxi.Core.Abstractions;
+using Sirena.Taxi.Core.Abstractions.Repositories;
 using Sirena.Taxi.Prices.Domain.Entities;
 
 namespace Sirena.Taxi.Prices.Service
 {
-    public class PriceService
+    public class PriceEntityConsumerService: IEntityConsumerService
     {
         private readonly IRepository<PriceRequest> _priceRepository;
 
-        public PriceService(IRepository<PriceRequest> priceRepository)
+        public PriceEntityConsumerService(IRepository<PriceRequest> priceRepository)
         {
             _priceRepository = priceRepository;
         }
@@ -27,5 +29,10 @@ namespace Sirena.Taxi.Prices.Service
             await _priceRepository.UpdateAsync(priceRequest);
         }
 
+        public async Task Execute(string topic, string message)
+        {
+            var entity = JsonConvert.DeserializeObject<PriceRequest>(message);
+            await UpdatePriceRequestAsync(entity);
+        }
     }
 }

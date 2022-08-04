@@ -1,19 +1,19 @@
 ﻿using Confluent.Kafka;
-using Newtonsoft.Json;
-using Sirena.Taxi.Prices.Domain.Entities;
-using Sirena.Taxi.Prices.Service;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Sirena.Taxi.Core.Abstractions;
 
-namespace Sirena.Taxi.Prices.Kafka
+namespace Sirena.Taxi.Core.Kafka
 {
     public class TopicConsumer : BackgroundService
     {
         private readonly IConfiguration _options;
-        private readonly PriceService _priceService;
+        private readonly IEntityConsumerService _entityConsumerService;
         public TopicConsumer(IConfiguration options, IServiceProvider serviceProvider)
         {
            _options = options;
-           _priceService = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<PriceService>();
-
+           _entityConsumerService = serviceProvider.CreateScope().ServiceProvider.GetRequiredService<IEntityConsumerService>();
         }
 
         protected override async Task<Task> ExecuteAsync(CancellationToken stoppingToken)
@@ -45,8 +45,7 @@ namespace Sirena.Taxi.Prices.Kafka
                         var cr = consumer.Consume(100);
                         if (cr != null)
                         {
-                            var entity = JsonConvert.DeserializeObject<PriceRequest>(cr.Message.Value);
-                            await _priceService.UpdatePriceRequestAsync(entity);
+                            _entityConsumerService.Execute(connection["ConsumerTopic"], cr.Message.Value);
                         }
                     }
                 }
